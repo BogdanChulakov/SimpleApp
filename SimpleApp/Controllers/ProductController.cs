@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SimpleApp.Data.Models;
 using SimpleApp.Models.Product;
 using SimpleApp.Services.Product;
@@ -17,12 +18,15 @@ namespace SimpleApp.Controllers
         {
             this.productService = productService;
         }
+
+        [Authorize]
         public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddAsync(InputProductViewModel input)
         {
             if (!this.ModelState.IsValid)
