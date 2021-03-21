@@ -1,0 +1,27 @@
+﻿@model SimpleApp.Models.Product.AllProductsViewModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h3 align="center">All Products</h3>
+@if (this.TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @this.TempData["Message"]
+    </div>
+}
+<table class="table">
+    <tr class="alert-info">
+        <th>Name:</th>
+        <th>Description:</th>
+        <th>Price:</th>
+    </tr>
+    @foreach (var pr in Model.Products)
+    {
+        <tr>
+            <th>@pr.Name</th>
+            <th>@pr.Description</th>
+            <th>@pr.Price $</th>
+        </tr>
+    }
+</table>
