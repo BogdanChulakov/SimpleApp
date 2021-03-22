@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OnlineSlotReports.Data.Seeding;
 using SimpleApp.Data;
 using SimpleApp.Services.Product;
 using System;
@@ -30,6 +31,7 @@ namespace SimpleApp
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -38,8 +40,8 @@ namespace SimpleApp
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 2;
                 options.SignIn.RequireConfirmedAccount = false;
-            })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -49,6 +51,18 @@ namespace SimpleApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                if (env.IsDevelopment())
+                {
+                    dbContext.Database.Migrate();
+                }
+
+                new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider, Configuration).GetAwaiter().GetResult();
+
+            }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,9 +84,8 @@ namespace SimpleApp
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
