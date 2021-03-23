@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using SimpleApp.Data.Models;
 using SimpleApp.Models.Product;
 using SimpleApp.Services.Product;
@@ -13,10 +14,12 @@ namespace SimpleApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService productService;
+        private readonly IMemoryCache memoryCache;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IMemoryCache memoryCache)
         {
             this.productService = productService;
+            this.memoryCache = memoryCache;
         }
 
         [Authorize]
@@ -40,12 +43,18 @@ namespace SimpleApp.Controllers
             return this.Redirect("All");
         }
 
-        public IActionResult All() 
+        public IActionResult All([FromRoute] string name)
         {
-            var products = this.productService.All<OutputProductViewModel>();
+            List<OutputProductViewModel> prds;
 
-            var prds = new AllProductsViewModel();
-            prds.Products = products;
+            if (!memoryCache.TryGetValue("prds", out prds))
+            {
+                memoryCache.Set("prds", productService.All<OutputProductViewModel>());
+            }
+
+            prds = memoryCache.Get("prds") as List<OutputProductViewModel>;
+           
+         
             return this.View(prds);
         }
     }

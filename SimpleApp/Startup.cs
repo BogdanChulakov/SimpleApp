@@ -45,7 +45,7 @@ namespace SimpleApp
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            services.AddMemoryCache();
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -82,7 +82,6 @@ namespace SimpleApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthentication();
