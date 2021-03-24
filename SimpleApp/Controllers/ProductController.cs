@@ -49,9 +49,25 @@ namespace SimpleApp.Controllers
 
             if (!memoryCache.TryGetValue("prds", out prds))
             {
-                memoryCache.Set("prds", productService.All<OutputProductViewModel>());
-            }
 
+                var products = productService.All();
+
+                prds = new List<OutputProductViewModel>();
+
+                foreach (var prod in products)
+                {
+                    var product = new OutputProductViewModel
+                    {
+                        Name = prod.Name,
+                        Description = prod.Description,
+                        Price = prod.Price
+                    };
+
+                    prds.Add(product);
+                }
+                memoryCache.Set("prds", prds);
+            }
+           
             prds = memoryCache.Get("prds") as List<OutputProductViewModel>;
            
          

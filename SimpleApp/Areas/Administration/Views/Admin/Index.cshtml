@@ -1,7 +1,16 @@
-﻿@{
+﻿@using SimpleApp.Models.Product
+@model List<AdminProductViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome from Admin area!</h1>
+    <h1 class="display-4" >Welcome from Admin area!</h1>
 </div>
+<ul>
+    @foreach (var pr in Model)
+    {
+        <li>@pr.Name  |  @pr.Id </li>
+        <a class="text-danger" asp-controller="Admin" asp-action="Delete" asp-route-id="@pr.Id" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+    }
+</ul>

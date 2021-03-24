@@ -29,24 +29,24 @@ namespace SimpleApp.Services.Product
             await this.dbContext.SaveChangesAsync();
         }
 
-        public List<OutputProductViewModel> All<T>()
+        public List<Data.Models.Product> All()
         {
-            var prds = new List<OutputProductViewModel>();
+         
             var products = this.dbContext.Products.ToList();
-            foreach (var prod in products)
-            {
-                var product = new OutputProductViewModel
-                {
-                    Name = prod.Name,
-                    Description = prod.Description,
-                    Price = prod.Price
-                };
 
-                prds.Add(product);
-            }
-
-            return prds;
+            return products;
         }
+
+        public async Task DeleteAsync(string Id)
+        {
+
+            var product = this.dbContext.Products.Find(Id);
+
+            this.dbContext.Products.Remove(product);
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
 
     }
 }

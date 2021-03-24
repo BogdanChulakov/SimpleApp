@@ -8,8 +8,10 @@ namespace SimpleApp.Services.Product
 {
     public interface IProductService
     {
-        List<OutputProductViewModel> All<T>();
+        List<Data.Models.Product> All();
 
         Task AddAsync(string name, string description, double price);
+
+        Task DeleteAsync(string Id);
     }
 }
