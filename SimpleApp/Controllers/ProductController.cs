@@ -43,7 +43,7 @@ namespace SimpleApp.Controllers
             return this.Redirect("All");
         }
 
-        public IActionResult All([FromRoute] string name)
+        public IActionResult All(string sort)
         {
             List<OutputProductViewModel> prds;
 
@@ -67,10 +67,27 @@ namespace SimpleApp.Controllers
                 }
                 memoryCache.Set("prds", prds);
             }
-           
+
             prds = memoryCache.Get("prds") as List<OutputProductViewModel>;
-           
-         
+
+            switch (sort)
+            {
+                case "priceA":
+                    prds = prds.OrderBy(x => x.Price).ToList();
+                    break;
+                case "priceD":
+                    prds = prds.OrderByDescending(x => x.Price).ToList();
+                    break;
+                case "nameD":
+                    prds = prds.OrderByDescending(x => x.Name).ToList();
+                    break;
+                case "nameA":
+                    prds = prds.OrderBy(x => x.Name).ToList();
+                    break;
+                default:
+                    break;
+            }
+
             return this.View(prds);
         }
     }
