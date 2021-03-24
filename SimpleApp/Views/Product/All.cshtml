@@ -15,14 +15,14 @@
     <tr class="alert-info">
         <th>
             Name:
-            <a asp-action="All" asp-route-sort="nameA"><i class="fas fa-angle-double-up"></i>Asc</a>
-            <a class="btn btn-primary" asp-action="All" asp-route-sort="nameD"><i class="fas fa-angle-double-up"></i>Desc</a>
+            <a asp-action="All" asp-route-sort="nameA"><i class="fas fa-arrow-circle-up"></i>Asc</a>
+            <a asp-action="All" asp-route-sort="nameD"><i class="fas fa-arrow-circle-down"></i>Desc</a>
         </th>
         <th>Description:</th>
         <th>
             Price:
-            <a class="btn btn-primary" asp-action="All" asp-route-sort="priceA"><i class="fas fa-angle-double-up"></i>Asc</a>
-            <a class="btn btn-primary" asp-action="All" asp-route-sort="priceD"><i class="fas fa-angle-double-up"></i>Desc</a>
+            <a asp-action="All" asp-route-sort="priceA"><i class="fas fa-arrow-circle-up"></i>Asc</a>
+            <a asp-action="All" asp-route-sort="priceD"><i class="fas fa-arrow-circle-down"></i>Desc</a>
         </th>
     </tr>
     @foreach (var pr in Model)
