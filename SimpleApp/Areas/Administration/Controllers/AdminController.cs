@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using SimpleApp.Models.Product;
 using SimpleApp.Services.Product;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SimpleApp.Areas.Administration.Controllers
@@ -16,11 +15,13 @@ namespace SimpleApp.Areas.Administration.Controllers
     {
         private readonly IProductService productService;
         private readonly IMemoryCache memoryCache;
+        private readonly IMapper mapper;
 
-        public AdminController(IProductService productService, IMemoryCache memoryCache)
+        public AdminController(IProductService productService, IMemoryCache memoryCache,IMapper mapper)
         {
             this.productService = productService;
             this.memoryCache = memoryCache;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
@@ -31,13 +32,7 @@ namespace SimpleApp.Areas.Administration.Controllers
 
             foreach (var prod in products)
             {
-                var product = new AdminProductViewModel
-                {
-                    Id = prod.Id,
-                    Name = prod.Name,
-                    Description = prod.Description,
-                    Price = prod.Price
-                };
+                var product = mapper.Map<AdminProductViewModel>(prod);
 
                 prds.Add(product);
             }

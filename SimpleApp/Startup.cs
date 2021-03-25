@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,10 +9,6 @@ using Microsoft.Extensions.Hosting;
 using OnlineSlotReports.Data.Seeding;
 using SimpleApp.Data;
 using SimpleApp.Services.Product;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SimpleApp
 {
@@ -46,6 +40,7 @@ namespace SimpleApp
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddMemoryCache();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());

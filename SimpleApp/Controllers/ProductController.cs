@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using SimpleApp.Data.Models;
 using SimpleApp.Models.Product;
 using SimpleApp.Services.Product;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +14,13 @@ namespace SimpleApp.Controllers
     {
         private readonly IProductService productService;
         private readonly IMemoryCache memoryCache;
+        private readonly IMapper mapper;
 
-        public ProductController(IProductService productService, IMemoryCache memoryCache)
+        public ProductController(IProductService productService, IMemoryCache memoryCache,IMapper mapper)
         {
             this.productService = productService;
             this.memoryCache = memoryCache;
+            this.mapper = mapper;
         }
 
         [Authorize]
@@ -58,13 +59,7 @@ namespace SimpleApp.Controllers
 
                 foreach (var prod in products)
                 {
-                    var product = new OutputProductViewModel
-                    {
-                        Name = prod.Name,
-                        Description = prod.Description,
-                        Price = prod.Price
-                    };
-
+                    var product = mapper.Map<OutputProductViewModel>(prod);              
                     prds.Add(product);
                 }
                 memoryCache.Set("prds", prds);
