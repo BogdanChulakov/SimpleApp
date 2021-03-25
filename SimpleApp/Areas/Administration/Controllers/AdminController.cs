@@ -49,6 +49,8 @@ namespace SimpleApp.Areas.Administration.Controllers
         {
             await this.productService.DeleteAsync(id);
 
+            this.memoryCache.Remove("prds");
+
             return this.Redirect("/Administration/Admin");
         }
     }

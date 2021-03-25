@@ -38,6 +38,8 @@ namespace SimpleApp.Controllers
             }
             await this.productService.AddAsync(input.Name, input.Description, input.Price);
 
+            this.memoryCache.Remove("prds");
+
             this.TempData["Message"] = "Product was added successfully!";
 
             return this.Redirect("All");
